@@ -12,10 +12,6 @@ var (
 	world World
 )
 
-func V2(x, y float64) box2d.B2Vec2 {
-	return box2d.B2Vec2{X: x, Y: y}
-}
-
 func init() {
 	gravity := box2d.MakeB2Vec2(0.0, 10)
 	world = World{box2d.MakeB2World(gravity)}
@@ -29,6 +25,10 @@ func Update() {
 	world.Step(step, velocityIterations, positionIterations)
 }
 
-func SetGravity(g box2d.B2Vec2) {
-	world.SetGravity(g)
+func SetGravity(x, y float64) {
+	world.SetGravity(box2d.B2Vec2{X: x, Y: y})
+}
+
+func SetGravityV(g Vec2) {
+	world.SetGravity(g.toB2Vec2())
 }
