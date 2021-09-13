@@ -18,11 +18,62 @@ type bodyParams struct {
 }
 type BodyOpt func(*bodyParams)
 
-func DeleteBody(b *box2d.B2Body) {
-	world.DestroyBody(b)
+// DeleteBody removes a body from the physics engine
+func DeleteBody(b Body) {
+	world.DestroyBody(b.b2body)
 }
 
-func NewBody(opts ...BodyOpt) *box2d.B2Body {
+// Body represents a physical object in the simulation
+type Body struct {
+	b2body *box2d.B2Body
+}
+
+func (b *Body) Position() (x, y float64) {
+	p := b.b2body.GetPosition()
+	return p.X, p.Y
+}
+
+func (b *Body) PositionV() Vec2 {
+	return Vec2(b.b2body.GetPosition())
+}
+
+func (b *Body) X() float64 {
+	return b.b2body.GetPosition().X
+}
+
+func (b *Body) Y() float64 {
+	return b.b2body.GetPosition().Y
+}
+
+func (b *Body) SetPosition(x, y float64) {
+	angle := b.b2body.GetAngle()
+	b.b2body.SetTransform(box2d.B2Vec2{X: x, Y: y}, angle)
+}
+
+func (b *Body) SetPositionV(v Vec2) {
+	b.SetPosition(v.X, v.Y)
+}
+
+func (b *Body) SetAngle(a float64) {
+	pos := b.b2body.GetPosition()
+	b.b2body.SetTransform(pos, a)
+}
+
+// SetType allows to change the body type at runtime
+func (b *Body) SetType(t BodyType) {
+	switch t {
+	case DynamicBody:
+		b.b2body.SetType(box2d.B2BodyType.B2_dynamicBody)
+
+	case KinematicBody:
+		b.b2body.SetType(box2d.B2BodyType.B2_kinematicBody)
+
+	case StaticBody:
+		b.b2body.SetType(box2d.B2BodyType.B2_staticBody)
+	}
+}
+
+func NewBody(opts ...BodyOpt) Body {
 	// Default body definition
 	def := box2d.MakeB2BodyDef()
 	params := bodyParams{bd: def, fd: nil}
@@ -33,7 +84,7 @@ func NewBody(opts ...BodyOpt) *box2d.B2Body {
 	}
 
 	// Create a new body from its definition
-	return makeBody(params)
+	return Body{b2body: makeBody(params)}
 }
 
 func makeBody(params bodyParams) *box2d.B2Body {
@@ -60,13 +111,6 @@ func Type(t BodyType) BodyOpt {
 	}
 }
 
-func Damping(linear float64, angular float64) BodyOpt {
-	return func(p *bodyParams) {
-		p.bd.LinearDamping = linear
-		p.bd.AngularDamping = angular
-	}
-}
-
 func AllowSleep() BodyOpt {
 	return func(p *bodyParams) {
 		p.bd.AllowSleep = true
@@ -82,12 +126,6 @@ func FixRotation() BodyOpt {
 func Bullet() BodyOpt {
 	return func(p *bodyParams) {
 		p.bd.Bullet = true
-	}
-}
-
-func ScaleGravity(scale float64) BodyOpt {
-	return func(p *bodyParams) {
-		p.bd.GravityScale = scale
 	}
 }
 
