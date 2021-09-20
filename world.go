@@ -14,11 +14,16 @@ var (
 
 func init() {
 	gravity := box2d.MakeB2Vec2(0.0, 10)
-	world = World{box2d.MakeB2World(gravity)}
+	world = World{
+		box2d.MakeB2World(gravity),
+		CollisionHandler{},
+	}
+	world.SetContactListener(&world.CollisionHandler)
 }
 
 type World struct {
 	box2d.B2World
+	CollisionHandler
 }
 
 func Update() {

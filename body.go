@@ -74,6 +74,10 @@ func (b *Body) Force(force Vec2) {
 	b.b2body.ApplyForceToCenter(force.toB2Vec2(), true)
 }
 
+func (b *Body) setUserData(data interface{}) {
+	b.b2body.SetUserData(data)
+}
+
 // SetType allows to change the body type at runtime
 func (b *Body) SetType(t BodyType) {
 	switch t {
