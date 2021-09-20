@@ -151,6 +151,7 @@ func Circle(radius float64) BodyOpt {
 		c.SetRadius(radius)
 		fd := box2d.MakeB2FixtureDef()
 		fd.Shape = c
+		p.fd = &fd
 	}
 }
 
@@ -160,6 +161,7 @@ func Edge(v1, v2 box2d.B2Vec2) BodyOpt {
 		c.Set(v1, v2)
 		fd := box2d.MakeB2FixtureDef()
 		fd.Shape = c
+		p.fd = &fd
 	}
 }
 
@@ -169,6 +171,7 @@ func Polygon(vertices []box2d.B2Vec2) BodyOpt {
 		c.Set(vertices, len(vertices))
 		fd := box2d.MakeB2FixtureDef()
 		fd.Shape = c
+		p.fd = &fd
 	}
 }
 
@@ -178,5 +181,6 @@ func Rectangle(base, height float64) BodyOpt {
 		c.SetAsBox(base/2, height/2)
 		fd := box2d.MakeB2FixtureDef()
 		fd.Shape = c
+		p.fd = &fd
 	}
 }

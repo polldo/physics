@@ -4,7 +4,7 @@ go 1.17
 
 require (
 	github.com/go-p5/p5 v0.12.0
-	github.com/polldo/box2d v1.0.2
+	github.com/polldo/box2d v1.0.3
 )
 
 require (
