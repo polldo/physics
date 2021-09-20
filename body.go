@@ -66,8 +66,7 @@ func (b *Body) Impulse(impulse Vec2) {
 func (b *Body) ReachVelocity(vel Vec2) {
 	m := b.b2body.GetMass()
 	currVel := Vec2(b.b2body.GetLinearVelocity())
-	vel.SubVec(currVel)
-	vel.Scale(m)
+	vel.SubV(currVel).Scale(m)
 	b.Impulse(vel)
 }
 

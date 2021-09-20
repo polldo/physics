@@ -14,28 +14,34 @@ func (v *Vec2) Set(x, y float64) {
 	v.X, v.Y = x, y
 }
 
-func (v *Vec2) Add(c float64) {
+func (v *Vec2) Add(c float64) *Vec2 {
 	v.X, v.Y = v.X+c, v.Y+c
+	return v
 }
 
-func (v *Vec2) Sub(c float64) {
+func (v *Vec2) Sub(c float64) *Vec2 {
 	v.X, v.Y = v.X-c, v.Y-c
+	return v
 }
 
-func (v *Vec2) Scale(c float64) {
+func (v *Vec2) Scale(c float64) *Vec2 {
 	v.X, v.Y = v.X*c, v.Y*c
+	return v
 }
 
-func (v *Vec2) AddVec(o Vec2) {
+func (v *Vec2) AddV(o Vec2) *Vec2 {
 	v.X, v.Y = v.X+o.X, v.Y+o.Y
+	return v
 }
 
-func (v *Vec2) SubVec(o Vec2) {
+func (v *Vec2) SubV(o Vec2) *Vec2 {
 	v.X, v.Y = v.X-o.X, v.Y-o.Y
+	return v
 }
 
-func (v *Vec2) ScaleVec(o Vec2) {
+func (v *Vec2) ScaleV(o Vec2) *Vec2 {
 	v.X, v.Y = v.X*o.X, v.Y*o.Y
+	return v
 }
 
 func (v Vec2) toB2Vec2() box2d.B2Vec2 {
