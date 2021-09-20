@@ -28,6 +28,7 @@ type World struct {
 
 func Update() {
 	world.Step(step, velocityIterations, positionIterations)
+	world.Resolve()
 }
 
 func SetGravity(x, y float64) {

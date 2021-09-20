@@ -4,44 +4,38 @@ import (
 	"github.com/polldo/box2d"
 )
 
-// Collider is an entity interested in collision callbacks for a
-// certain body. It can be enabled by calling EnableBodyCollider.
+// Collider is an object capable of listen to collisions against other bodies.
+// In order to start listening, a Collider object should be attached to a body.
+// This can be done by calling SetObject function of a body.
+// If a body has a collider object then the collide function is called every
+// time the body collides with another body.
 type Collider interface {
-	Collide(interface{})
+	Collide(Body)
 }
 
-// BodyCollider is for entities that embed a body and are interested
-// in their collision callback.
-type BodyCollider interface {
-	Collider
-	// We use an unexported function to be sure this is a body
-	setUserData(interface{})
+type CollisionHandler struct {
+	pending []collision
 }
 
-// RegisterBodyCollider registers an entity which wants to receive callbacks
-// when its body collides with other bodies.
-func RegisterBodyCollider(collider BodyCollider) {
-	collider.setUserData(collider)
+type collision struct {
+	collider Collider
+	other    Body
 }
-
-// RegisterCollider registers an entity which wants to receive callbacks
-// when the passed body collides with other bodies.
-func RegisterCollider(collider Collider, body Body) {
-	body.setUserData(collider)
-}
-
-type CollisionHandler struct{}
 
 func (c *CollisionHandler) BeginContact(contact box2d.B2ContactInterface) {
-	a := contact.GetFixtureA().GetBody().GetUserData()
-	b := contact.GetFixtureB().GetBody().GetUserData()
+	a := contact.GetFixtureA().GetBody()
+	b := contact.GetFixtureB().GetBody()
+	aObj := a.GetUserData()
+	bObj := b.GetUserData()
 
-	if aCollider, ok := a.(Collider); ok {
-		aCollider.Collide(b)
+	if aCollider, ok := aObj.(Collider); ok {
+		// aCollider.Collide(Body{b})
+		c.pending = append(c.pending, collision{aCollider, Body{b}})
 	}
 
-	if bCollider, ok := b.(Collider); ok {
-		bCollider.Collide(b)
+	if bCollider, ok := bObj.(Collider); ok {
+		// bCollider.Collide(Body{a})
+		c.pending = append(c.pending, collision{bCollider, Body{a}})
 	}
 }
 
@@ -56,4 +50,11 @@ func (c *CollisionHandler) PreSolve(contact box2d.B2ContactInterface, oldManifol
 
 func (c *CollisionHandler) PostSolve(contact box2d.B2ContactInterface, impulse *box2d.B2ContactImpulse) {
 	// possibility to change effects of collision (friction and restitution)
+}
+
+func (c *CollisionHandler) Resolve() {
+	for _, coll := range c.pending {
+		coll.collider.Collide(coll.other)
+	}
+	c.pending = nil
 }
