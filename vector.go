@@ -18,12 +18,20 @@ func (v *Vec2) Add(c float64) {
 	v.X, v.Y = v.X+c, v.Y+c
 }
 
+func (v *Vec2) Sub(c float64) {
+	v.X, v.Y = v.X-c, v.Y-c
+}
+
 func (v *Vec2) Scale(c float64) {
 	v.X, v.Y = v.X*c, v.Y*c
 }
 
 func (v *Vec2) AddVec(o Vec2) {
 	v.X, v.Y = v.X+o.X, v.Y+o.Y
+}
+
+func (v *Vec2) SubVec(o Vec2) {
+	v.X, v.Y = v.X-o.X, v.Y-o.Y
 }
 
 func (v *Vec2) ScaleVec(o Vec2) {

@@ -59,6 +59,22 @@ func (b *Body) SetAngle(a float64) {
 	b.b2body.SetTransform(pos, a)
 }
 
+func (b *Body) Impulse(impulse Vec2) {
+	b.b2body.ApplyLinearImpulseToCenter(box2d.B2Vec2(impulse), true)
+}
+
+func (b *Body) ReachVelocity(vel Vec2) {
+	m := b.b2body.GetMass()
+	currVel := Vec2(b.b2body.GetLinearVelocity())
+	vel.SubVec(currVel)
+	vel.Scale(m)
+	b.Impulse(vel)
+}
+
+func (b *Body) Force(force Vec2) {
+	b.b2body.ApplyForceToCenter(force.toB2Vec2(), true)
+}
+
 // SetType allows to change the body type at runtime
 func (b *Body) SetType(t BodyType) {
 	switch t {
