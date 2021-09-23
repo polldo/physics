@@ -12,17 +12,6 @@ const (
 	StaticBody
 )
 
-type bodyParams struct {
-	bd box2d.B2BodyDef
-	fd *box2d.B2FixtureDef
-}
-type BodyOpt func(*bodyParams)
-
-// DeleteBody removes a body from the physics engine
-func DeleteBody(b Body) {
-	world.DestroyBody(b.b2body)
-}
-
 // Body represents a physical object in the simulation
 type Body struct {
 	b2body *box2d.B2Body
@@ -111,6 +100,17 @@ func (b *Body) CollisionFilter() (category uint16, mask uint16) {
 		return
 	}
 	return 0xffff, 0xffff
+}
+
+type bodyParams struct {
+	bd box2d.B2BodyDef
+	fd *box2d.B2FixtureDef
+}
+type BodyOpt func(*bodyParams)
+
+// DeleteBody removes a body from the physics engine
+func DeleteBody(b Body) {
+	world.DestroyBody(b.b2body)
 }
 
 func NewBody(opts ...BodyOpt) Body {
