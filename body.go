@@ -96,6 +96,23 @@ func (b *Body) SetType(t BodyType) {
 	}
 }
 
+// Assume one fixture for body possible at the moment
+func (b *Body) SetCollisionFilter(category, mask uint16) {
+	if fix := b.b2body.M_fixtureList; fix != nil {
+		fix.M_filter.CategoryBits = category
+		fix.M_filter.MaskBits = mask
+	}
+}
+
+func (b *Body) CollisionFilter() (category uint16, mask uint16) {
+	if fix := b.b2body.M_fixtureList; fix != nil {
+		category = fix.M_filter.CategoryBits
+		mask = fix.M_filter.MaskBits
+		return
+	}
+	return 0xffff, 0xffff
+}
+
 func NewBody(opts ...BodyOpt) Body {
 	// Default body definition
 	def := box2d.MakeB2BodyDef()
