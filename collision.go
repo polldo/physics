@@ -1,4 +1,4 @@
-package body
+package physics
 
 import (
 	"github.com/polldo/box2d"

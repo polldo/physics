@@ -1,4 +1,4 @@
-module body
+module physics
 
 go 1.17
 
