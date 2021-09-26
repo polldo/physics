@@ -3,7 +3,7 @@ package main
 import (
 	"image/color"
 
-	"physics"
+	"github.com/polldo/physics"
 
 	"github.com/go-p5/p5"
 )

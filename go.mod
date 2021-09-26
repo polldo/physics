@@ -1,4 +1,4 @@
-module physics
+module github.com/polldo/physics
 
 go 1.17
 
