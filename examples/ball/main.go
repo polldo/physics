@@ -3,7 +3,7 @@ package main
 import (
 	"image/color"
 
-	"body"
+	"physics"
 
 	"github.com/go-p5/p5"
 )
@@ -16,7 +16,7 @@ const (
 )
 
 var (
-	ballBody body.Body
+	ballBody physics.Body
 )
 
 func setup() {
@@ -24,8 +24,8 @@ func setup() {
 	p5.Stroke(nil)
 	p5.Fill(color.RGBA{R: 255, A: 204})
 
-	body.SetGravity(0.3, 8)
-	ballBody = body.NewBody(body.Type(body.DynamicBody), body.Circle(rad))
+	physics.SetGravity(0.3, 8)
+	ballBody = physics.NewBody(physics.Type(physics.DynamicBody), physics.Circle(rad))
 	ballBody.SetPosition(100, 100)
 }
 
@@ -34,7 +34,7 @@ func main() {
 }
 
 func draw() {
-	body.Update()
+	physics.Update()
 	p5.Background(color.Gray{Y: 220})
 
 	p5.Fill(color.RGBA{R: 255, A: 204})
