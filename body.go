@@ -43,6 +43,10 @@ func (b *Body) SetPositionV(v Vec2) {
 	b.SetPosition(v.X, v.Y)
 }
 
+func (b *Body) Angle() float64 {
+	return b.b2body.GetAngle()
+}
+
 func (b *Body) SetAngle(a float64) {
 	pos := b.b2body.GetPosition()
 	b.b2body.SetTransform(pos, a)
